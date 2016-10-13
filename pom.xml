@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.innopolis.mputilov</groupId>
-    <artifactId>dsa.assignment.ga-1</artifactId>
+    <artifactId>dsa.assignment.ga-1.7</artifactId>
     <version>1.0-SNAPSHOT</version>
     <description></description>
     <dependencies>
