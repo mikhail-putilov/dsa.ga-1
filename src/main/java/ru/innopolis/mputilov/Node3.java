@@ -60,11 +60,14 @@ public class Node3 implements Tree {
 
     @Override
     public int hashCode() {
-        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild) + Objects.hash(midChild), Objects.hash(3));
+        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild) + Objects.hash(midChild));
+    }
+    @Override
+    public String toString() {
+        return "{" + formatString(leftChild) + formatString(midChild) + formatString(rightChild) + "}";
     }
 
-    @Override
-    public void print() {
-
+    private String formatString(Tree child) {
+        return child == null ? "" : child.toString();
     }
 }

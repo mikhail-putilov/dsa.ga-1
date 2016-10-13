@@ -1,7 +1,9 @@
 package ru.innopolis.mputilov;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.ObjectInputStream;
+import java.io.ObjectStreamClass;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by mputilov on 13/10/16.
@@ -9,7 +11,6 @@ import java.util.Set;
 public class TreeGenerator {
     private int maxHeight;
     private int currentHeight;
-    private Set<Tree> generatedTrees = new HashSet<>();
 
     public TreeGenerator(int maxHeight) {
         this(maxHeight, 1);
@@ -24,43 +25,54 @@ public class TreeGenerator {
         }
         this.maxHeight = maxHeight;
         this.currentHeight = currentHeight;
-        if (currentHeight == 1) {
-            setBase();
-        }
-    }
-
-    public void addTree(Tree t) {
-        generatedTrees.add(t);
-    }
-
-    private void setBase() {
-        generatedTrees.add(new Node2(null, null));
-        generatedTrees.add(new Node3(null, null, null));
     }
 
     public Set<Tree> generateAllIsomorphicTrees() {
-        if (maxHeight == currentHeight) {
-            return generatedTrees;
-        }
-        
-        //создаем новый инстанс генератора с новым слоем всех разных видов деревьев с maxHeight меньше на единицу
-        TreeGenerator newGenerator = new TreeGenerator(maxHeight, currentHeight + 1);
-        //берем 2-node как корень нового дерева и перебираем со всеми дереьвями которые ранее были сгенерированы
-        for (Tree firstChild : generatedTrees) {
-            for (Tree secondChild : generatedTrees) {
+        Collection<Tree> trees = new ArrayList<>();
+        trees.add(new Node2(null, null));
+        trees.add(new Node3(null, null, null));
+//        for (;currentHeight < maxHeight; currentHeight++) {
+//            List<Tree> treesWithNode2AsRoot = joinWithNode2(trees);
+//            List<Tree> treesWithNode3AsRoot = joinWithNode3(trees);
+//            trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
+//        }
+        List<Tree> treesWithNode2AsRoot = new HashSet<>(joinWithNode2(trees)).stream().collect(Collectors.toList());
+        List<Tree> treesWithNode3AsRoot = new HashSet<>(joinWithNode3(trees)).stream().collect(Collectors.toList());
+        trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
+        trees = new HashSet<>(trees);
+
+        treesWithNode2AsRoot = joinWithNode2(trees);
+        treesWithNode3AsRoot = joinWithNode3(trees);
+        trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
+
+        return new HashSet<>(trees);
+    }
+
+    private List<Tree> concatLists(List<Tree> firstList, List<Tree> secondList) {
+        firstList.addAll(secondList);
+        return firstList;
+    }
+
+    private List<Tree> joinWithNode2(Collection<Tree> trees) {
+        List<Tree> joined = new ArrayList<>();
+        for (Tree firstChild : trees) {
+            for (Tree secondChild : trees) {
                 //из-за того что это set, дубликаты (согласно структуре) элиминируются, и количество не будет большим
-                newGenerator.addTree(new Node2(firstChild, secondChild));
+                joined.add(new Node2(firstChild, secondChild));
             }
         }
-        //то же самое происходит и с 3-node: берем его в качестве корня и присоединяем к его детям все комбинации
-        //ранее сгенерированных деревьев
-        for (Tree firstChild : generatedTrees) {
-            for (Tree secondChild : generatedTrees) {
-                for (Tree thirdChild : generatedTrees) {
-                    newGenerator.addTree(new Node3(firstChild, secondChild, thirdChild));
+        return joined;
+    }
+
+    private List<Tree> joinWithNode3(Collection<Tree> trees) {
+        List<Tree> joined = new ArrayList<>();
+        for (Tree firstChild : trees) {
+            for (Tree secondChild : trees) {
+                for (Tree thirdChild : trees) {
+                    joined.add(new Node3(firstChild, secondChild, thirdChild));
                 }
             }
         }
-        return newGenerator.generateAllIsomorphicTrees();
+        return joined;
     }
 }

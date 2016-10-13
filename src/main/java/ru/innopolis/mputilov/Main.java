@@ -11,8 +11,7 @@ public class Main {
         TreeGenerator generator = new TreeGenerator(3);
         Set<Tree> trees = generator.generateAllIsomorphicTrees();
         for (Tree t : trees) {
-            System.out.println("#" + counter++);
-            t.print();
+            System.out.println("" + counter++ + "\t" + t.toString());
         }
     }
 }

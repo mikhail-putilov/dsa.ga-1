@@ -53,11 +53,17 @@ public class Node2 implements Tree {
 
     @Override
     public int hashCode() {
-        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild), Objects.hash(2));
+        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild));
     }
 
     @Override
-    public void print() {
-
+    public String toString() {
+        return "(" + formatString(leftChild) + formatString(rightChild) + ")";
     }
+
+    private String formatString(Tree child) {
+        return child == null ? "" : child.toString();
+    }
+
+
 }
