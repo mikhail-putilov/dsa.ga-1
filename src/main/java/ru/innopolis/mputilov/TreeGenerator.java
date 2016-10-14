@@ -1,9 +1,8 @@
 package ru.innopolis.mputilov;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectStreamClass;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by mputilov on 13/10/16.
@@ -31,28 +30,27 @@ public class TreeGenerator {
         Collection<Tree> trees = new ArrayList<>();
         trees.add(new Node2(null, null));
         trees.add(new Node3(null, null, null));
-//        for (;currentHeight < maxHeight; currentHeight++) {
-//            List<Tree> treesWithNode2AsRoot = joinWithNode2(trees);
-//            List<Tree> treesWithNode3AsRoot = joinWithNode3(trees);
-//            trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
-//        }
-        List<Tree> treesWithNode2AsRoot = new HashSet<>(joinWithNode2(trees)).stream().collect(Collectors.toList());
-        List<Tree> treesWithNode3AsRoot = new HashSet<>(joinWithNode3(trees)).stream().collect(Collectors.toList());
-        trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
-        trees = new HashSet<>(trees);
+        for (; currentHeight < maxHeight; currentHeight++) {
+            List<Tree> treesWithNode2AsRoot = new HashSet<>(joinWithNode2(trees)).stream().collect(toList());
+            List<Tree> treesWithNode3AsRoot = new HashSet<>(joinWithNode3(trees)).stream().collect(toList());
 
-        treesWithNode2AsRoot = joinWithNode2(trees);
-        treesWithNode3AsRoot = joinWithNode3(trees);
-        trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
+            trees = concatLists(treesWithNode2AsRoot, treesWithNode3AsRoot);
+        }
 
         return new HashSet<>(trees);
     }
 
-    private List<Tree> concatLists(List<Tree> firstList, List<Tree> secondList) {
+    private Collection<Tree> concatLists(Collection<Tree> firstList, Collection<Tree> secondList) {
         firstList.addAll(secondList);
         return firstList;
     }
 
+    /**
+     * Node-2 is a root. Join trees with themselves 2 times to create all different children
+     *
+     * @param trees possible subtrees as children
+     * @return all new combinations with node-2 as a root and all possible children
+     */
     private List<Tree> joinWithNode2(Collection<Tree> trees) {
         List<Tree> joined = new ArrayList<>();
         for (Tree firstChild : trees) {
@@ -64,6 +62,12 @@ public class TreeGenerator {
         return joined;
     }
 
+    /**
+     * Node-3 is a root. Join trees with themselves 3 times to create all different children
+     *
+     * @param trees possible subtrees as children
+     * @return all new combinations with node-3 as a root and all possible children
+     */
     private List<Tree> joinWithNode3(Collection<Tree> trees) {
         List<Tree> joined = new ArrayList<>();
         for (Tree firstChild : trees) {
