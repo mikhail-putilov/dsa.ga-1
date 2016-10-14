@@ -11,6 +11,7 @@ public class Node3 implements Tree {
     private Tree leftChild;
     private Tree midChild;
     private Tree rightChild;
+    private int depth;
 
     public Node3(Tree leftChild, Tree midChild, Tree rightChild) {
         this.leftChild = leftChild;
@@ -55,13 +56,14 @@ public class Node3 implements Tree {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node3 node3 = (Node3) o;
-        return getSetOfChildren().equals(node3.getSetOfChildren());
+        return getSetOfChildren().equals(node3.getSetOfChildren()) && getDepth() == node3.getDepth();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild) + Objects.hash(midChild));
+        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild) + Objects.hash(midChild), getDepth());
     }
+
     @Override
     public String toString() {
         return "{" + formatString(leftChild) + formatString(midChild) + formatString(rightChild) + "}";
@@ -69,5 +71,15 @@ public class Node3 implements Tree {
 
     private String formatString(Tree child) {
         return child == null ? "" : child.toString();
+    }
+
+    @Override
+    public int getDepth() {
+        return depth;
+    }
+
+    @Override
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 }

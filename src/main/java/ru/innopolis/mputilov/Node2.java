@@ -8,14 +8,15 @@ import java.util.*;
 public class Node2 implements Tree {
     private Tree leftChild;
     private Tree rightChild;
-
-    private Collection<Tree> getCollectionOfChildren() {
-        return Arrays.asList(leftChild, rightChild);
-    }
+    private int depth;
 
     public Node2(Tree leftChild, Tree rightChild) {
         this.leftChild = leftChild;
         this.rightChild = rightChild;
+    }
+
+    private Collection<Tree> getCollectionOfChildren() {
+        return Arrays.asList(leftChild, rightChild);
     }
 
     public Tree getLeftChild() {
@@ -47,13 +48,13 @@ public class Node2 implements Tree {
         if (o == null || getClass() != o.getClass()) return false;
         Node2 node2 = (Node2) o;
 
-        return getSetOfChildren().equals(node2.getSetOfChildren());
+        return getSetOfChildren().equals(node2.getSetOfChildren()) && getDepth() == node2.getDepth();
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild));
+        return Objects.hash(Objects.hash(leftChild) + Objects.hash(rightChild), getDepth());
     }
 
     @Override
@@ -66,4 +67,13 @@ public class Node2 implements Tree {
     }
 
 
+    @Override
+    public int getDepth() {
+        return depth;
+    }
+
+    @Override
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
 }
