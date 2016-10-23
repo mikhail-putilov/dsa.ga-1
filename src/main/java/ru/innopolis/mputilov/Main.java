@@ -7,11 +7,15 @@ import java.util.Set;
  */
 public class Main {
     public static void main(String[] args) {
-        int counter = 1;
-        TreeGenerator generator = new TreeGenerator(3);
-        Set<Tree> trees = generator.generateAllIsomorphicTrees();
-        for (Tree t : trees) {
-            System.out.println("" + counter++ + "\t" + t.toString());
+        for (int i = 1; i < 4; i++) {
+            System.out.println("Different trees with height=" + (i + 1));
+            int counter = 1;
+            TreeGenerator generator = new TreeGenerator(i);
+            Set<Tree> trees = generator.generateAllIsomorphicTrees();
+            for (Tree t : trees) {
+                System.out.println("" + counter++ + "\t" + t.toString());
+            }
         }
+
     }
 }
